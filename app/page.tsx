@@ -30,24 +30,40 @@ export default async function HomePage() {
   const topics = await getTopics();
 
   return (
-    <main className="min-h-screen bg-white text-black p-6">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">Comment Product MVP</h1>
-        <p className="text-gray-600 mb-6">
-          AI-organized discussion topics
-        </p>
+    <main className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-sky-50 p-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="rounded-3xl bg-white shadow-sm border border-slate-200 p-8 mb-8">
+          <div className="inline-block rounded-full bg-indigo-100 px-4 py-1 text-sm font-medium text-indigo-700 mb-4">
+            AI-Organized Discussions
+          </div>
 
-        <div className="space-y-4">
+          <h1 className="text-4xl font-extrabold text-slate-900 mb-3">
+            Comment Product MVP
+          </h1>
+
+          <p className="text-lg text-slate-600">
+            Explore topics, post comments, and vote on the best opinions.
+          </p>
+        </div>
+
+        <div className="space-y-5">
           {topics.map((topic) => (
             <Link
               key={topic.id}
               href={`/topics/${topic.slug}`}
-              className="block rounded-xl border p-4 hover:bg-gray-50"
+              className="block rounded-3xl bg-white shadow-sm border border-slate-200 p-6 hover:shadow-md hover:border-indigo-200 transition"
             >
-              <h2 className="text-xl font-semibold">{topic.title}</h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <h2 className="text-2xl font-bold text-slate-900">
+                {topic.title}
+              </h2>
+
+              <p className="text-slate-600 mt-2">
                 {topic.description ?? "No description"}
               </p>
+
+              <div className="mt-4 text-sm font-medium text-indigo-600">
+                Open discussion →
+              </div>
             </Link>
           ))}
         </div>
