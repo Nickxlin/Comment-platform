@@ -1,5 +1,6 @@
+// app/topics/[slug]/page.tsx
+import CommentComposer from "@/app/components/commentComposer";
 import VoteButtons from "@/app/components/VoteButtons";
-import { revalidatePath } from "next/cache";
 
 type Topic = {
   id: number;
@@ -96,50 +97,7 @@ export default async function TopicPage({
           </p>
         </div>
 
-        <form
-          action={async (formData) => {
-            "use server";
-
-            const content = formData.get("content") as string;
-
-            await fetch(
-              `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/comments`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-                  Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!}`,
-                },
-                body: JSON.stringify({
-                  topic_id: topic.id,
-                  content,
-                }),
-              }
-            );
-
-            revalidatePath(`/topics/${topic.slug}`);
-          }}
-          className="rounded-3xl bg-white shadow-sm border border-slate-200 p-6 mb-8"
-        >
-          <label className="block text-lg font-semibold text-slate-800 mb-3">
-            Add your comment
-          </label>
-
-          <textarea
-            name="content"
-            placeholder="Share your opinion..."
-            className="w-full rounded-2xl border border-slate-300 p-4 mb-4 min-h-[130px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-            required
-          />
-
-          <button
-            type="submit"
-            className="rounded-full bg-indigo-600 px-6 py-3 text-white font-semibold hover:bg-indigo-700"
-          >
-            Submit Comment
-          </button>
-        </form>
+        <CommentComposer topicId={topic.id} topicSlug={topic.slug} />
 
         <div className="space-y-5">
           {comments.map((c) => (
@@ -150,9 +108,7 @@ export default async function TopicPage({
               <div className="text-slate-800 text-lg leading-8">{c.content}</div>
 
               <div className="mt-4 flex items-center justify-between">
-                <div className="text-sm text-slate-400">
-                  Comment #{c.id}
-                </div>
+                <div className="text-sm text-slate-400">Comment #{c.id}</div>
 
                 <VoteButtons
                   commentId={c.id}
